@@ -1,11 +1,12 @@
 {
-  "name": "onebot-douyin",
-  "version": "0.2.0",
-  "description": "NapCat 风格的 OneBot 11 桥：把抖音 / 多闪 的个人号接进 NoneBot2 / Koishi / AstrBot 等机器人框架",
+  "name": "dsh-onebot-douyin",
+  "version": "0.3.0",
+  "description": "DSH 插件 + OneBot 11 桥：把抖音 / 多闪 个人号接进 DeepSeek Harness，也能给 NoneBot2 / Koishi / AstrBot 用",
   "type": "module",
-  "main": "./src/plugin.js",
+  "main": "./src/dsh-plugin.js",
   "exports": {
-    ".": "./src/plugin.js",
+    ".": "./src/dsh-plugin.js",
+    "./bridge": "./src/plugin.js",
     "./cli": "./src/cli.js",
     "./package.json": "./package.json"
   },
@@ -18,7 +19,8 @@
     "src",
     "scripts",
     "profiles",
-    "adapters",
+    "adapters/android/adapter.py",
+    "cordis.patch.yml",
     "config.example.json",
     "README.md",
     "AGENTS.md",
@@ -28,6 +30,9 @@
     "node": ">=20"
   },
   "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
     "onebot",
     "onebot11",
     "napcat",
@@ -48,5 +53,13 @@
   "dependencies": {
     "douyin-im": "^1.1.0",
     "ws": "^8.18.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "compatibility": {
+      "node": ">=20.18"
+    }
   }
 }

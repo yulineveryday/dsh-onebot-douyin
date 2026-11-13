@@ -1,0 +1,13 @@
+# DSH bundle patch：安装后自动插入一行插件配置。
+- insert:
+    - id: dsh-onebot-douyin
+      name: dsh-onebot-douyin
+      config:
+        enabled: true
+        autoStart: true
+        driver: douyin
+        host: 127.0.0.1
+        port: 5711
+        accessToken: ""
+        dataDir: ""
+        qrcodeFile: ""

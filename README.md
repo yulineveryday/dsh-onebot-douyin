@@ -2,6 +2,8 @@
 
 NapCat 风格的 OneBot 11 桥，把 **抖音 / 多闪** 的个人号接进现成机器人框架（NoneBot2 / Koishi / AstrBot / 各类 OneBot 客户端）。
 
+同时它也是一个 **DSH（DeepSeek Harness）插件**：装上之后，DSH 会话里直接多出 `onebot_status` / `onebot_login` / `onebot_send` / `onebot_friends` 四个工具，扫码登录、收发私聊都在对话里完成。
+
 它本身不是机器人框架，只做协议转换：
 
 - 对上层：一个标准 OneBot 11 服务（HTTP + 正向 WS + 反向 WS），和 NapCat 一样，框架只要填地址和 token 就能连。
@@ -25,25 +27,43 @@ NoneBot2 / Koishi / AstrBot
 
 ## 安装 / 当插件用
 
-三种用法，按需要挑一种：
+四种用法，按需要挑一种：
 
-**1. 本地跑**
+**1. 装进 DSH（推荐）**
+
+```bash
+# 发布到 npm 之后
+dsh plugin add dsh-onebot-douyin
+
+# 或者直接用本地打包出来的 tarball
+dsh plugin add ./dsh-onebot-douyin-0.3.0.tgz
+```
+
+装完重启 DSH（或在 插件 页面启用 / 重载），桥就会在 DSH 进程里自动起在 `127.0.0.1:5711`，第一次要扫码：
+
+- 要二维码：工具 `onebot_login`，`action=qrcode` → 返回 PNG 路径 + `http://127.0.0.1:5711/qrcode`
+- 抖音 App 扫码；若要求短信码，用 `action=sms` + `code=...`
+- 之后 `onebot_status` 看状态，`onebot_friends` 看好友，`onebot_send` 发消息
+
+登录态和会话数据放在 `$DSH_HOME/onebot-douyin/data`，重启不用重新扫码。
+
+**2. 本地跑**
 
 ```bash
 pnpm install && npm start
 ```
 
-**2. 当全局命令**（会装出 `obd` 和 `onebot-douyin` 两个命令）
+**3. 当全局命令**（会装出 `obd` 和 `onebot-douyin` 两个命令）
 
 ```bash
-npm i -g onebot-douyin
+npm i -g dsh-onebot-douyin
 obd start --config ./config.json
 ```
 
-**3. 嵌进自己的 Node 程序（插件形式）**
+**4. 嵌进自己的 Node 程序（bridge 形式）**
 
 ```js
-import { createBridge } from "onebot-douyin";
+import { createBridge } from "dsh-onebot-douyin/bridge";
 
 const bridge = createBridge({
   config: {
@@ -67,11 +87,25 @@ await bridge.stop();
 **发布到 npm**
 
 ```bash
-npm pack --dry-run     # 先看会打包哪些文件
-npm publish            # 发布前 npm view onebot-douyin 确认名字没被占
+npm pack --dry-run                    # 先看会打包哪些文件
+npm view dsh-onebot-douyin version    # 确认名字没被占
+npm publish --access public           # 发布；之后 dsh plugin add dsh-onebot-douyin 就能装
 ```
 
-配置查找顺序：当前工作目录的 `config.local.json` → `config.json` → 包目录下的同名文件 → 内置默认值。
+发布到 npm 是进 DSH 插件社区的前置条件：社区索引（`dsh-plugin-catalog`）只收 npm 上已发布、且声明了 `dsh.bundle` manifest 的包。收录请提 PR 到 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)。
+
+**在 DSH 里能用哪些工具**
+
+| 工具 | 作用 |
+| --- | --- |
+| `onebot_status` | 登录状态 / self_id / 昵称 / HTTP 地址 / 最后的错误 |
+| `onebot_login` | `qrcode` 出二维码、`status` 查进度、`sms` 交短信码 |
+| `onebot_send` | 发消息，`to` 是 OneBot 数字 id，`group=true` 发群 |
+| `onebot_friends` | 好友列表（`groups=true` 连群一起列） |
+
+插件配置项（`cordis.patch.yml` 或 DSH 的 插件 页面里改）：`enabled`、`autoStart`、`driver`（`douyin` | `mock`）、`host`、`port`（默认 5711）、`accessToken`、`dataDir`、`qrcodeFile`，留空即用默认值。
+
+独立运行时的配置查找顺序：当前工作目录的 `config.local.json` → `config.json` → 包目录下的同名文件 → 内置默认值。
 
 ## 快速开始（不需要手机）
 

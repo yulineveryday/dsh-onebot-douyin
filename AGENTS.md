@@ -21,3 +21,7 @@ node scripts/ctl.mjs doctor     # 只输出 PASS/FAIL 行
 - 改完代码跑 `node --test --test-isolation=none "test/*.test.js"`，只关心最后的 tests/pass/fail 三行。
 - 不读 node_modules；不整文件打印 README。
 - 会话凭据在 data/（已 gitignore），任何情况下不要外发。
+- 这个包同时是 DSH 插件（src/dsh-plugin.js + cordis.patch.yml）。验证安装：`node 
+  "C:/Users/17445/.dsh/dsh-runtimes/dsh-primary-runtime/dependencies/pnpm/bin/pnpm.mjs" pack` 出 tgz，
+  再 `dsh plugin --profile <tmp> add <tgz>` + `dsh --profile <tmp> --dump-config | grep onebot`，完事删掉 tmp profile。
+  注意：装 profile、dump-config、删 profile 都要 ~/.dsh 写权限，沙箱里得 escalation。

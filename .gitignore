@@ -4,3 +4,5 @@ config.local.json
 contacts.json
 data/
 __pycache__/
+dist/
+*.tgz
