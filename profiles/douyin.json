@@ -1,0 +1,18 @@
+{
+  "name": "抖音",
+  "package": "com.ss.android.ugc.aweme",
+  "poll_interval_ms": 1500,
+  "note": "选择器必须先用 python adapters/android/adapter.py probe 抓真实界面再校准；package 若不对，用 adb shell pm list packages | grep -i aweme 核对。",
+  "selectors": {
+    "chat_tab": { "text": "消息" },
+    "chat_item_unread": { "descriptionContains": "未读" },
+    "chat_item_name": { "className": "android.widget.TextView" },
+    "message_text": { "className": "android.widget.TextView", "clickable": false },
+    "input_box": { "className": "android.widget.EditText" },
+    "send_button": { "text": "发送" },
+    "search_entry": { "textContains": "搜索" },
+    "search_result": { "className": "android.widget.TextView" },
+    "plus_button": { "description": "更多" },
+    "back_button": { "description": "返回" }
+  }
+}

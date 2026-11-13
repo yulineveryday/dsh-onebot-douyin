@@ -1,0 +1,18 @@
+{
+  "name": "多闪",
+  "package": "com.bytedance.duoshan",
+  "poll_interval_ms": 1500,
+  "note": "多闪版本更少、界面更简单，但 package 名请用 adb shell pm list packages | grep -i duoshan 核对后再改这里；选择器同样要用 probe 校准。",
+  "selectors": {
+    "chat_tab": { "text": "消息" },
+    "chat_item_unread": { "descriptionContains": "未读" },
+    "chat_item_name": { "className": "android.widget.TextView" },
+    "message_text": { "className": "android.widget.TextView", "clickable": false },
+    "input_box": { "className": "android.widget.EditText" },
+    "send_button": { "text": "发送" },
+    "search_entry": { "textContains": "搜索" },
+    "search_result": { "className": "android.widget.TextView" },
+    "plus_button": { "description": "更多" },
+    "back_button": { "description": "返回" }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "log_level": "info",
+  "self_id": 10000,
+  "onebot": {
+    "host": "127.0.0.1",
+    "port": 5700,
+    "access_token": "",
+    "message_format": "array",
+    "heartbeat_interval": 30000,
+    "http": { "enabled": true },
+    "ws": { "enabled": true },
+    "reverse_ws": [
+      {
+        "url": "ws://127.0.0.1:8080/onebot/v11/ws",
+        "access_token": "",
+        "enabled": false
+      }
+    ]
+  },
+  "driver": {
+    "type": "mock",
+    "mock": {
+      "self": { "user_id": 10000, "nickname": "douyin-bot" },
+      "friends": [
+        { "user_id": 20001, "nickname": "测试好友" }
+      ]
+    },
+    "douyin": {
+      "dataDir": "data",
+      "qrcodeFile": "data/login.png",
+      "autoOpenVerification": false,
+      "logLevel": "warn"
+    },
+    "http": {
+      "inbound": { "host": "127.0.0.1", "port": 5702, "token": "" },
+      "outbound": { "url": "http://127.0.0.1:5701", "token": "", "timeout": 20000 },
+      "self": { "user_id": 10000, "nickname": "douyin-bot" }
+    }
+  }
+}

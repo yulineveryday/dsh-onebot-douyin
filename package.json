@@ -1,0 +1,52 @@
+{
+  "name": "onebot-douyin",
+  "version": "0.2.0",
+  "description": "NapCat 风格的 OneBot 11 桥：把抖音 / 多闪 的个人号接进 NoneBot2 / Koishi / AstrBot 等机器人框架",
+  "type": "module",
+  "main": "./src/plugin.js",
+  "exports": {
+    ".": "./src/plugin.js",
+    "./cli": "./src/cli.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "onebot-douyin": "bin/onebot-douyin.js",
+    "obd": "bin/onebot-douyin.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "scripts",
+    "profiles",
+    "adapters",
+    "config.example.json",
+    "README.md",
+    "AGENTS.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "onebot",
+    "onebot11",
+    "napcat",
+    "douyin",
+    "duoshan",
+    "qq-bot",
+    "chatbot",
+    "bridge"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js start",
+    "doctor": "node src/index.js doctor",
+    "test": "node --test --test-isolation=none \"test/*.test.js\"",
+    "ctl": "node scripts/ctl.mjs",
+    "pack": "npm pack --dry-run"
+  },
+  "dependencies": {
+    "douyin-im": "^1.1.0",
+    "ws": "^8.18.0"
+  }
+}
