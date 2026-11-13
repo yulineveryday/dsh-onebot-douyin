@@ -13,6 +13,7 @@ node scripts/ctl.mjs send <user_id> <text>
 node scripts/ctl.mjs watch      # 起一个 WS 监听，事件写 data/events.log
 node scripts/ctl.mjs events 10  # 紧凑回放最近 10 条事件
 node scripts/ctl.mjs doctor     # 只输出 PASS/FAIL 行
+node scripts/autostart.mjs status|install|uninstall|run   # 开机自启动（Windows 计划任务 onlogon，隐藏窗口启动）
 ```
 
 规矩：

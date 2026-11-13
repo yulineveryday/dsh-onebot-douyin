@@ -47,6 +47,7 @@
   "scripts": {
     "start": "node src/index.js start",
     "doctor": "node src/index.js doctor",
+    "autostart": "node scripts/autostart.mjs",
     "test": "node --test --test-isolation=none \"test/*.test.js\"",
     "ctl": "node scripts/ctl.mjs",
     "pack": "npm pack --dry-run"

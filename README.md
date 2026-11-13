@@ -231,6 +231,7 @@ src/index.js            入口（调 cli.js）
 src/cli.js              CLI 实现: start / doctor
 src/plugin.js           编程接口: createBridge()（插件形式）
 scripts/ctl.mjs         省 token 运维命令: status / start / stop / send / events
+scripts/autostart.mjs   开机自启动（Windows 计划任务 onlogon，隐藏窗口）
 src/config.js           配置合并（内置默认值 + 文件 + 环境变量）
 src/logger.js           分级日志
 src/onebot/segments.js  消息段 <-> CQ 码
@@ -265,10 +266,27 @@ node scripts/ctl.mjs events 10  # 紧凑回放事件
 
 配合 [AGENTS.md](AGENTS.md) 使用：新会话的 agent 读那 30 行就能开工，不必把 README 和源码读一遍。
 
+## 开机自启动
+
+桥跑起来之后就不用管了，但它不会自己开机起来。Windows 上装一个计划任务（登录时触发、隐藏窗口、不弹黑框）：
+
+```bash
+node scripts/autostart.mjs install    # 建计划任务 dsh-onebot-douyin（触发器 onlogon）
+node scripts/autostart.mjs status     # state=Ready + last_result=0 就是好的
+node scripts/autostart.mjs run        # 立刻跑一次（验证用）
+node scripts/autostart.mjs uninstall  # 不要了
+```
+
+- 任务名 `dsh-onebot-douyin`，触发器 `onlogon`；登录后由 `data/autostart.vbs` 隐藏启动 `scripts/ctl.mjs start`。
+- 启动输出在 `data/autostart.log`，桥自己的日志在 `data/bridge.log`（超过 1MB 自动轮转）。
+- 用哪个 node 是在执行 install 时定下来的（记在 `data/autostart.cmd`）；换了 node 就重跑一次 install。
+- 会话已经在 `data/` 里，重启机器不用重新扫码；只有登录态真失效时才要再扫一次。
+- Linux / macOS 没做：systemd unit 或 launchd 直接跑 `node src/index.js start --config config.json` 就行。
+
 ## 测试
 
 ```bash
-node --test --test-isolation=none test/
+node --test --test-isolation=none "test/*.test.js"
 ```
 
 注意：`node --test` 默认会给每个测试文件开子进程，某些沙箱里 spawn 被拒（EPERM），所以要加 `--test-isolation=none`（Node 22+）或在普通终端里直接跑。用例全部离线，不碰真实抖音网络。
